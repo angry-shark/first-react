@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Record extends Component {
     constructor(props){
@@ -23,3 +24,10 @@ class Record extends Component {
 }
 
 export default Record;
+
+Record.propTypes = {
+    id: PropTypes.number,
+    date: PropTypes.string,
+    title: PropTypes.string,
+    amount: PropTypes.number
+}

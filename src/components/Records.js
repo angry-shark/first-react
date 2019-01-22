@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Record from '../components/Record';
-/*import { getJSON } from 'jquery';*/
-import axios from 'axios';
+import RecordForm from './RecordForm';
+/*import { getJSON } from 'jquery';
+import axios from 'axios';*/
+import * as RecordsAPI from '../utils/RecordsAPI.js';
 
 class Records extends Component {
   constructor(){
@@ -29,7 +31,30 @@ class Records extends Component {
       })
     )*/
 
-    axios.get("http://localhost:3004/records").then(
+   /* axios.get("http://localhost:3004/records").then(
+      response => this.setState({
+        records:response.data,
+        isLoaded:true
+        })
+    ).catch(
+      error => this.setState({
+        isLoaded:true,
+        error
+      })
+    )*/
+/*
+    axios.get(`${RecordsAPI.api}/records`).then(
+      response => this.setState({
+        records:response.data,
+        isLoaded:true
+        })
+    ).catch(
+      error => this.setState({
+        isLoaded:true,
+        error
+      })
+    )*/
+    RecordsAPI.getAll().then(
       response => this.setState({
         records:response.data,
         isLoaded:true
@@ -44,34 +69,37 @@ class Records extends Component {
 
   render() {
     const {error,isLoaded,records} = this.state;
+    var RecordComponent;
+
 
     if(error){
-      return <div>Error:{error.message}</div>;
+      RecordComponent = <div>Error:{error.message}</div>;
     }
     else if(!isLoaded){
-      return <div>Loading...</div>;
+      RecordComponent = <div>Loading...</div>;
     }else{
-      return (
-        <div>
-          <h2>Records</h2>
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Title</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              {records.map((record,i) => <Record record={record} key={record.id}/>)}
-            </tbody>
-          </table>
-        </div>
-      );
+        RecordComponent = <table className="table table-bordered">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {records.map((record,i) => <Record record={record} key={record.id}/>)}
+          </tbody>
+        </table>
     }
 
-    
+    return (
+      <div>
+        <h2>Records</h2>
+        <RecordForm/>
+        {RecordComponent}
+      </div>);
   }
+
 }
 
 export default Records;
